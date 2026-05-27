@@ -74,16 +74,9 @@ export const Events: CollectionConfig = {
     },
     {
       name: 'type',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'event-types',
       required: true,
-      options: [
-        { label: 'Meeting', value: 'meeting' },
-        { label: 'Social', value: 'social' },
-        { label: 'Service', value: 'service' },
-        { label: 'Fundraiser', value: 'fundraiser' },
-        { label: 'Trip', value: 'trip' },
-        { label: 'Other', value: 'other' },
-      ],
     },
     {
       name: 'isForBothClubs',

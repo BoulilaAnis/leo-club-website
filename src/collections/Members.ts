@@ -100,17 +100,8 @@ export const Members: CollectionConfig = {
     },
     {
       name: 'position',
-      type: 'select',
-      options: [
-        { label: 'President', value: 'president' },
-        { label: 'Vice President', value: 'vice_president' },
-        { label: 'Secretary', value: 'secretary' },
-        { label: 'Treasurer', value: 'treasurer' },
-        { label: 'Board Member', value: 'board_member' },
-        { label: 'Active Member', value: 'active_member' },
-        { label: 'New Member', value: 'new_member' },
-      ],
-      defaultValue: 'new_member',
+      type: 'relationship',
+      relationTo: 'positions',
     },
     {
       name: 'score',

@@ -74,6 +74,8 @@ export interface Config {
     events: Event;
     'club-history': ClubHistory;
     'score-adjustments': ScoreAdjustment;
+    positions: Position;
+    'event-types': EventType;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -87,6 +89,8 @@ export interface Config {
     events: EventsSelect<false> | EventsSelect<true>;
     'club-history': ClubHistorySelect<false> | ClubHistorySelect<true>;
     'score-adjustments': ScoreAdjustmentsSelect<false> | ScoreAdjustmentsSelect<true>;
+    positions: PositionsSelect<false> | PositionsSelect<true>;
+    'event-types': EventTypesSelect<false> | EventTypesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -202,9 +206,7 @@ export interface Member {
   contactEmail?: string | null;
   avatar?: (string | null) | Media;
   bio?: string | null;
-  position?:
-    | ('president' | 'vice_president' | 'secretary' | 'treasurer' | 'board_member' | 'active_member' | 'new_member')
-    | null;
+  position?: (string | null) | Position;
   score?: number | null;
   isActive?: boolean | null;
   updatedAt: string;
@@ -226,6 +228,17 @@ export interface Member {
     | null;
   password?: string | null;
   collection: 'members';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "positions".
+ */
+export interface Position {
+  id: string;
+  name: string;
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -253,9 +266,20 @@ export interface Event {
   eventDate: string;
   location?: string | null;
   image?: (string | null) | Media;
-  type: 'meeting' | 'social' | 'service' | 'fundraiser' | 'trip' | 'other';
+  type: string | EventType;
   isForBothClubs?: boolean | null;
   isPublic?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-types".
+ */
+export interface EventType {
+  id: string;
+  name: string;
+  sortOrder?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -355,6 +379,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'score-adjustments';
         value: string | ScoreAdjustment;
+      } | null)
+    | ({
+        relationTo: 'positions';
+        value: string | Position;
+      } | null)
+    | ({
+        relationTo: 'event-types';
+        value: string | EventType;
       } | null);
   globalSlug?: string | null;
   user:
@@ -528,6 +560,26 @@ export interface ScoreAdjustmentsSelect<T extends boolean = true> {
   amount?: T;
   reason?: T;
   createdBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "positions_select".
+ */
+export interface PositionsSelect<T extends boolean = true> {
+  name?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-types_select".
+ */
+export interface EventTypesSelect<T extends boolean = true> {
+  name?: T;
+  sortOrder?: T;
   updatedAt?: T;
   createdAt?: T;
 }

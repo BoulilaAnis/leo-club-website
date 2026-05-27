@@ -6,15 +6,6 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import { getClub } from '@/lib/club'
 import { Button } from '@/components/ui/button'
 
-const TYPE_BADGES: Record<string, string> = {
-  meeting: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-  social: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-  service: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
-  fundraiser: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-  trip: 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200',
-  other: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
-}
-
 export default async function EventDetailPage({
   params,
 }: {
@@ -27,6 +18,7 @@ export default async function EventDetailPage({
   const event = await payload.findByID({
     collection: 'events',
     id: eventId,
+    depth: 1,
   })
 
   if (!event || (event.club !== slug && !event.isForBothClubs)) return notFound()
@@ -41,8 +33,8 @@ export default async function EventDetailPage({
 
       <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-3">
-          <span className={`rounded-full px-3 py-1 text-xs font-medium ${TYPE_BADGES[event.type as string] || TYPE_BADGES.other}`}>
-            {event.type as string}
+          <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+            {(event.type as any)?.name}
           </span>
           {event.eventDate && (
             <span className="text-sm text-muted-foreground">

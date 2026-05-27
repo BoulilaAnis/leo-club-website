@@ -26,22 +26,19 @@ export default async function AboutPage({
     collection: 'members',
     where: {
       club: { equals: slug },
-      position: { in: ['president', 'vice_president', 'secretary', 'treasurer'] },
+      position: { not_equals: null },
       isActive: { equals: true },
     },
+    depth: 1,
     sort: 'position',
-    limit: 10,
+    limit: 20,
   })
 
-  const POSITION_LABELS: Record<string, string> = {
-    president: 'President',
-    vice_president: 'Vice President',
-    secretary: 'Secretary',
-    treasurer: 'Treasurer',
-  }
-
-  const POSITION_ORDER = ['president', 'vice_president', 'secretary', 'treasurer']
-  const sortedBoard = [...board].sort((a, b) => POSITION_ORDER.indexOf(a.position as string) - POSITION_ORDER.indexOf(b.position as string))
+  const sortedBoard = [...board].sort((a, b) => {
+    const aOrder = (a.position as any)?.sortOrder ?? 999
+    const bOrder = (b.position as any)?.sortOrder ?? 999
+    return aOrder - bOrder
+  })
 
   return (
     <div className="mx-auto max-w-4xl space-y-12 p-4 py-12">
@@ -87,7 +84,7 @@ export default async function AboutPage({
                         {member.firstName as string} {member.lastName as string}
                       </CardTitle>
                       <p className="text-sm text-muted-foreground">
-                        {POSITION_LABELS[member.position as string] || member.position as string}
+                        {(member.position as any)?.name}
                       </p>
                     </div>
                   </div>

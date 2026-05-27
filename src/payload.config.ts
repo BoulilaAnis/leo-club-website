@@ -11,6 +11,8 @@ import { Members } from './collections/Members'
 import { Events } from './collections/Events'
 import { ClubHistory } from './collections/ClubHistory'
 import { ScoreAdjustments } from './collections/ScoreAdjustments'
+import { Positions } from './collections/Positions'
+import { EventTypes } from './collections/EventTypes'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,7 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Members, Events, ClubHistory, ScoreAdjustments],
+  collections: [Users, Media, Members, Events, ClubHistory, ScoreAdjustments, Positions, EventTypes],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

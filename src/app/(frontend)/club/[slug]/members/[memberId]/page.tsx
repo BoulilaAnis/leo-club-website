@@ -7,16 +7,6 @@ import { getMemberUser } from '@/lib/auth'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
-const POSITION_LABELS: Record<string, string> = {
-  president: 'President',
-  vice_president: 'Vice President',
-  secretary: 'Secretary',
-  treasurer: 'Treasurer',
-  board_member: 'Board Member',
-  active_member: 'Active Member',
-  new_member: 'New Member',
-}
-
 export default async function MemberProfilePage({
   params,
 }: {
@@ -32,6 +22,7 @@ export default async function MemberProfilePage({
   const member = await payload.findByID({
     collection: 'members',
     id: memberId,
+    depth: 1,
     req: { headers },
   })
 
@@ -59,7 +50,7 @@ export default async function MemberProfilePage({
             {member.firstName} {member.lastName}
           </h1>
           <p className="text-muted-foreground">
-            {POSITION_LABELS[member.position as string] || member.position}
+            {(member.position as any)?.name}
           </p>
         </div>
       </div>
