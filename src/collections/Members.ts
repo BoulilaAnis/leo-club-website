@@ -1,0 +1,133 @@
+import type { CollectionConfig } from 'payload'
+
+function restrictToClub(user: { club?: string | null } | null | undefined) {
+  if (user?.club === 'alpha' || user?.club === 'omega') {
+    return { club: { equals: user.club } }
+  }
+  return true
+}
+
+function restrictToSelf(user: { id?: string | null } | null | undefined) {
+  if (user?.id) {
+    return { id: { equals: user.id } }
+  }
+  return false
+}
+
+export const Members: CollectionConfig = {
+  slug: 'members',
+  admin: {
+    useAsTitle: 'username',
+    group: 'Club',
+  },
+  auth: {
+    loginWithUsername: true,
+    tokenExpiration: 7200,
+  },
+  hooks: {
+    beforeChange: [
+      ({ data, req: { user }, operation }) => {
+        if (operation === 'create' && user?.collection === 'users' && user.club) {
+          return { ...data, club: user.club }
+        }
+        return data
+      },
+    ],
+  },
+  access: {
+    read: ({ req: { user } }) => {
+      if (!user) return false
+      if (user.collection === 'users' || user.collection === 'members') {
+        return restrictToClub(user)
+      }
+      return false
+    },
+    create: ({ req: { user } }) => !!user && user.collection === 'users',
+    update: ({ req: { user } }) => {
+      if (!user) return false
+      if (user.collection === 'users') return restrictToClub(user)
+      if (user.collection === 'members') return restrictToSelf(user)
+      return false
+    },
+    delete: ({ req: { user } }) => {
+      if (!user) return false
+      if (user.collection === 'users') return restrictToClub(user)
+      return false
+    },
+  },
+  fields: [
+    {
+      name: 'club',
+      type: 'select',
+      required: true,
+      options: [
+        { label: 'Alpha (-18)', value: 'alpha' },
+        { label: 'Omega (18+)', value: 'omega' },
+      ],
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'firstName',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'lastName',
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'username',
+      type: 'text',
+      unique: true,
+      required: true,
+    },
+    {
+      name: 'contactEmail',
+      type: 'text',
+      label: 'Contact Email',
+    },
+    {
+      name: 'avatar',
+      type: 'upload',
+      relationTo: 'media',
+    },
+    {
+      name: 'bio',
+      type: 'textarea',
+    },
+    {
+      name: 'position',
+      type: 'select',
+      options: [
+        { label: 'President', value: 'president' },
+        { label: 'Vice President', value: 'vice_president' },
+        { label: 'Secretary', value: 'secretary' },
+        { label: 'Treasurer', value: 'treasurer' },
+        { label: 'Board Member', value: 'board_member' },
+        { label: 'Active Member', value: 'active_member' },
+        { label: 'New Member', value: 'new_member' },
+      ],
+      defaultValue: 'new_member',
+    },
+    {
+      name: 'score',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'isActive',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+  ],
+}
