@@ -24,7 +24,13 @@ export default async function EventsPage({
 
   const { docs: events } = await payload.find({
     collection: 'events',
-    where: { club: { equals: slug }, isPublic: { equals: true } },
+    where: {
+      or: [
+        { club: { equals: slug } },
+        { isForBothClubs: { equals: true } },
+      ],
+      isPublic: { equals: true },
+    },
     sort: '-eventDate',
     limit: 50,
   })

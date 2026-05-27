@@ -86,6 +86,14 @@ export const Events: CollectionConfig = {
       ],
     },
     {
+      name: 'isForBothClubs',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'isPublic',
       type: 'checkbox',
       defaultValue: true,

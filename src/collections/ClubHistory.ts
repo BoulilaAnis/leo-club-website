@@ -64,6 +64,14 @@ export const ClubHistory: CollectionConfig = {
       type: 'richText',
     },
     {
+      name: 'isForBothClubs',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'images',
       type: 'array',
       fields: [

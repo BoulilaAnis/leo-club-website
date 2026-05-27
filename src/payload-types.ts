@@ -254,6 +254,7 @@ export interface Event {
   location?: string | null;
   image?: (string | null) | Media;
   type: 'meeting' | 'social' | 'service' | 'fundraiser' | 'trip' | 'other';
+  isForBothClubs?: boolean | null;
   isPublic?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -282,6 +283,7 @@ export interface ClubHistory {
     };
     [k: string]: unknown;
   } | null;
+  isForBothClubs?: boolean | null;
   images?:
     | {
         image?: (string | null) | Media;
@@ -491,6 +493,7 @@ export interface EventsSelect<T extends boolean = true> {
   location?: T;
   image?: T;
   type?: T;
+  isForBothClubs?: T;
   isPublic?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -504,6 +507,7 @@ export interface ClubHistorySelect<T extends boolean = true> {
   year?: T;
   title?: T;
   description?: T;
+  isForBothClubs?: T;
   images?:
     | T
     | {

@@ -29,7 +29,7 @@ export default async function EventDetailPage({
     id: eventId,
   })
 
-  if (!event || event.club !== slug) return notFound()
+  if (!event || (event.club !== slug && !event.isForBothClubs)) return notFound()
 
   return (
     <div className="mx-auto max-w-3xl space-y-8 p-4 py-12">

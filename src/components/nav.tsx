@@ -21,6 +21,7 @@ function detectContext(pathname: string): NavContext {
 
 export default function Nav({ user }: { user?: MemberUser | null }) {
   const pathname = usePathname()
+  if (pathname === '/') return null
   const ctx = detectContext(pathname)
 
   function logo() {
