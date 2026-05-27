@@ -147,6 +147,8 @@ export interface MemberAuthOperations {
   };
 }
 /**
+ * Administrators who manage the club and its content
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -176,6 +178,8 @@ export interface User {
   collection: 'users';
 }
 /**
+ * Images used across the site — event photos, member avatars, history images
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -195,23 +199,40 @@ export interface Media {
   focalY?: number | null;
 }
 /**
+ * Member accounts — each member can log in with their username and password
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "members".
  */
 export interface Member {
   id: string;
+  /**
+   * Auto-set based on your admin account
+   */
   club: 'alpha' | 'omega';
   firstName: string;
   lastName: string;
+  /**
+   * Only visible to the member themselves
+   */
   contactEmail?: string | null;
   avatar?: (string | null) | Media;
   bio?: string | null;
   position?: (string | null) | Position;
+  /**
+   * Automatically calculated from score adjustments
+   */
   score?: number | null;
+  /**
+   * Disable to deactivate without deleting the account
+   */
   isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email?: string | null;
+  /**
+   * Used by the member to log in
+   */
   username: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -230,6 +251,8 @@ export interface Member {
   collection: 'members';
 }
 /**
+ * Roles that can be assigned to members (e.g. President, Secretary, Active Member)
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "positions".
  */
@@ -241,11 +264,16 @@ export interface Position {
   createdAt: string;
 }
 /**
+ * Public events shown on the club page — meetings, socials, service projects, and more
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
   id: string;
+  /**
+   * Auto-set based on your admin account
+   */
   club: 'alpha' | 'omega';
   title: string;
   description?: {
@@ -263,16 +291,24 @@ export interface Event {
     };
     [k: string]: unknown;
   } | null;
-  eventDate: string;
   location?: string | null;
   image?: (string | null) | Media;
   type: string | EventType;
+  eventDate: string;
+  /**
+   * Show this event on both club pages
+   */
   isForBothClubs?: boolean | null;
+  /**
+   * Uncheck to hide from the public club page
+   */
   isPublic?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Categories applied to events (e.g. Meeting, Social, Service, Fundraiser)
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "event-types".
  */
@@ -284,14 +320,22 @@ export interface EventType {
   createdAt: string;
 }
 /**
+ * Historical milestones and achievements shown in the club timeline
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "club-history".
  */
 export interface ClubHistory {
   id: string;
+  /**
+   * Auto-set based on your admin account
+   */
   club: 'alpha' | 'omega';
   year: number;
   title: string;
+  /**
+   * Main content of this history entry
+   */
   description?: {
     root: {
       type: string;
@@ -307,6 +351,9 @@ export interface ClubHistory {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Show this entry on both club pages
+   */
   isForBothClubs?: boolean | null;
   images?:
     | {
@@ -319,15 +366,32 @@ export interface ClubHistory {
   createdAt: string;
 }
 /**
+ * Each adjustment adds or removes points from a member's score with a required reason
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "score-adjustments".
  */
 export interface ScoreAdjustment {
   id: string;
+  /**
+   * The member whose score will be adjusted
+   */
   member: string | Member;
+  /**
+   * Auto-set based on your admin account
+   */
   club: 'alpha' | 'omega';
+  /**
+   * Use a positive number to add points, negative to subtract
+   */
   amount: number;
+  /**
+   * Explain why this score change was made
+   */
   reason: string;
+  /**
+   * The admin who created this adjustment
+   */
   createdBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
@@ -521,10 +585,10 @@ export interface EventsSelect<T extends boolean = true> {
   club?: T;
   title?: T;
   description?: T;
-  eventDate?: T;
   location?: T;
   image?: T;
   type?: T;
+  eventDate?: T;
   isForBothClubs?: T;
   isPublic?: T;
   updatedAt?: T;

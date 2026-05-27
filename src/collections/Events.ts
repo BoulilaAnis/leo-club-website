@@ -4,8 +4,9 @@ export const Events: CollectionConfig = {
   slug: 'events',
   admin: {
     useAsTitle: 'title',
-    group: 'Club',
+    group: 'Club Content',
     defaultColumns: ['title', 'eventDate', 'type', 'isPublic'],
+    description: 'Public events shown on the club page — meetings, socials, service projects, and more',
   },
   hooks: {
     beforeChange: [
@@ -44,6 +45,7 @@ export const Events: CollectionConfig = {
       ],
       admin: {
         position: 'sidebar',
+        description: 'Auto-set based on your admin account',
       },
     },
     {
@@ -54,14 +56,6 @@ export const Events: CollectionConfig = {
     {
       name: 'description',
       type: 'richText',
-    },
-    {
-      name: 'eventDate',
-      type: 'date',
-      required: true,
-      admin: {
-        position: 'sidebar',
-      },
     },
     {
       name: 'location',
@@ -79,11 +73,20 @@ export const Events: CollectionConfig = {
       required: true,
     },
     {
+      name: 'eventDate',
+      type: 'date',
+      required: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'isForBothClubs',
       type: 'checkbox',
       defaultValue: false,
       admin: {
         position: 'sidebar',
+        description: 'Show this event on both club pages',
       },
     },
     {
@@ -92,6 +95,7 @@ export const Events: CollectionConfig = {
       defaultValue: true,
       admin: {
         position: 'sidebar',
+        description: 'Uncheck to hide from the public club page',
       },
     },
   ],

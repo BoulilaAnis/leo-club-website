@@ -15,6 +15,8 @@ export const Users: CollectionConfig = {
   slug: 'users',
   admin: {
     useAsTitle: 'email',
+    defaultColumns: ['email', 'club'],
+    description: 'Administrators who manage the club and its content',
   },
   auth: true,
   access: {

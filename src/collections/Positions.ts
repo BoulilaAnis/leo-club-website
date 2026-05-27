@@ -4,8 +4,9 @@ export const Positions: CollectionConfig = {
   slug: 'positions',
   admin: {
     useAsTitle: 'name',
-    group: 'Club',
+    group: 'Club Settings',
     defaultColumns: ['name', 'sortOrder'],
+    description: 'Roles that can be assigned to members (e.g. President, Secretary, Active Member)',
   },
   access: {
     read: () => true,

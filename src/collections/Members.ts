@@ -18,7 +18,9 @@ export const Members: CollectionConfig = {
   slug: 'members',
   admin: {
     useAsTitle: 'username',
-    group: 'Club',
+    group: 'Club Members',
+    defaultColumns: ['firstName', 'lastName', 'position', 'score', 'isActive'],
+    description: 'Member accounts — each member can log in with their username and password',
   },
   auth: {
     loginWithUsername: true,
@@ -66,6 +68,7 @@ export const Members: CollectionConfig = {
       ],
       admin: {
         position: 'sidebar',
+        description: 'Auto-set based on your admin account',
       },
     },
     {
@@ -83,11 +86,17 @@ export const Members: CollectionConfig = {
       type: 'text',
       unique: true,
       required: true,
+      admin: {
+        description: 'Used by the member to log in',
+      },
     },
     {
       name: 'contactEmail',
       type: 'text',
       label: 'Contact Email',
+      admin: {
+        description: 'Only visible to the member themselves',
+      },
     },
     {
       name: 'avatar',
@@ -110,6 +119,7 @@ export const Members: CollectionConfig = {
       admin: {
         position: 'sidebar',
         readOnly: true,
+        description: 'Automatically calculated from score adjustments',
       },
     },
     {
@@ -118,6 +128,7 @@ export const Members: CollectionConfig = {
       defaultValue: true,
       admin: {
         position: 'sidebar',
+        description: 'Disable to deactivate without deleting the account',
       },
     },
   ],

@@ -4,8 +4,9 @@ export const EventTypes: CollectionConfig = {
   slug: 'event-types',
   admin: {
     useAsTitle: 'name',
-    group: 'Club',
+    group: 'Club Settings',
     defaultColumns: ['name', 'sortOrder'],
+    description: 'Categories applied to events (e.g. Meeting, Social, Service, Fundraiser)',
   },
   access: {
     read: () => true,

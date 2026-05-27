@@ -28,9 +28,10 @@ async function recalculateScore(payload: any, memberId: string) {
 export const ScoreAdjustments: CollectionConfig = {
   slug: 'score-adjustments',
   admin: {
-    group: 'Club',
+    group: 'Club Members',
     defaultColumns: ['member', 'amount', 'reason', 'createdAt'],
     useAsTitle: 'reason',
+    description: 'Each adjustment adds or removes points from a member\'s score with a required reason',
   },
   hooks: {
     beforeChange: [
@@ -88,6 +89,9 @@ export const ScoreAdjustments: CollectionConfig = {
       relationTo: 'members',
       required: true,
       index: true,
+      admin: {
+        description: 'The member whose score will be adjusted',
+      },
     },
     {
       name: 'club',
@@ -100,17 +104,24 @@ export const ScoreAdjustments: CollectionConfig = {
       admin: {
         position: 'sidebar',
         readOnly: true,
+        description: 'Auto-set based on your admin account',
       },
     },
     {
       name: 'amount',
       type: 'number',
       required: true,
+      admin: {
+        description: 'Use a positive number to add points, negative to subtract',
+      },
     },
     {
       name: 'reason',
       type: 'textarea',
       required: true,
+      admin: {
+        description: 'Explain why this score change was made',
+      },
     },
     {
       name: 'createdBy',
@@ -119,6 +130,7 @@ export const ScoreAdjustments: CollectionConfig = {
       admin: {
         position: 'sidebar',
         readOnly: true,
+        description: 'The admin who created this adjustment',
       },
     },
   ],

@@ -4,8 +4,9 @@ export const ClubHistory: CollectionConfig = {
   slug: 'club-history',
   admin: {
     useAsTitle: 'title',
-    group: 'Club',
-    defaultColumns: ['year', 'title'],
+    group: 'Club Content',
+    defaultColumns: ['year', 'title', 'club', 'updatedAt'],
+    description: 'Historical milestones and achievements shown in the club timeline',
   },
   hooks: {
     beforeChange: [
@@ -44,6 +45,7 @@ export const ClubHistory: CollectionConfig = {
       ],
       admin: {
         position: 'sidebar',
+        description: 'Auto-set based on your admin account',
       },
     },
     {
@@ -62,6 +64,9 @@ export const ClubHistory: CollectionConfig = {
     {
       name: 'description',
       type: 'richText',
+      admin: {
+        description: 'Main content of this history entry',
+      },
     },
     {
       name: 'isForBothClubs',
@@ -69,6 +74,7 @@ export const ClubHistory: CollectionConfig = {
       defaultValue: false,
       admin: {
         position: 'sidebar',
+        description: 'Show this entry on both club pages',
       },
     },
     {
