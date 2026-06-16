@@ -2,7 +2,18 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
 export async function POST(req: Request) {
-  const { username, password } = await req.json()
+  const body = await req.json()
+
+  if (!body || typeof body.username !== 'string' || typeof body.password !== 'string') {
+    return Response.json({ error: 'Invalid request body' }, { status: 400 })
+  }
+
+  const username = body.username.trim()
+  const password = body.password
+
+  if (!username || !password) {
+    return Response.json({ error: 'Username and password are required' }, { status: 400 })
+  }
 
   const payload = await getPayload({ config: configPromise })
 
