@@ -4,7 +4,7 @@ function restrictToClub(user: { club?: string | null } | null | undefined) {
   if (user?.club === 'alpha' || user?.club === 'omega') {
     return { club: { equals: user.club } }
   }
-  return true
+  return false
 }
 
 function restrictToSelf(user: { id?: string | null } | null | undefined) {
@@ -23,10 +23,21 @@ export const Members: CollectionConfig = {
     description: 'Member accounts — each member can log in with their username and password',
   },
   auth: {
-    loginWithUsername: true,
+    loginWithUsername: {
+      requireEmail: false,
+      allowEmailLogin: false,
+    },
     tokenExpiration: 7200,
   },
   hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (data && 'email' in data && !data.email) {
+          delete data.email
+        }
+        return data
+      },
+    ],
     beforeChange: [
       ({ data, req: { user }, operation }) => {
         if (operation === 'create' && user?.collection === 'users' && user.club) {
@@ -58,6 +69,19 @@ export const Members: CollectionConfig = {
     },
   },
   fields: [
+    {
+      name: 'email',
+      type: 'text',
+      required: false,
+      unique: false,
+      admin: {
+        hidden: true,
+      },
+      validate: (value: string | null | undefined) => {
+        if (!value) return true
+        return true
+      },
+    },
     {
       name: 'club',
       type: 'select',

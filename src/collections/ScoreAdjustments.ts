@@ -4,7 +4,7 @@ function restrictToClub(user: { club?: string | null } | null | undefined) {
   if (user?.club === 'alpha' || user?.club === 'omega') {
     return { club: { equals: user.club } }
   }
-  return true
+  return false
 }
 
 async function recalculateScore(payload: any, memberId: string) {

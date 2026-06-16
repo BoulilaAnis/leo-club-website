@@ -4,7 +4,7 @@ function restrictToClub(user: { club?: string | null } | null | undefined) {
   if (user?.club === 'alpha' || user?.club === 'omega') {
     return { club: { equals: user.club } }
   }
-  return true
+  return false
 }
 
 function restrictToSelf(user: { id?: string | null } | null | undefined) {
