@@ -6,13 +6,11 @@ const CLUB_INFO = {
     name: 'Alpha Club',
     tagline: 'For members under 18',
     description: 'Leadership, Experience, Opportunity — building the next generation of leaders.',
-    color: 'from-blue-600 to-cyan-500',
   },
   omega: {
     name: 'Omega Club',
     tagline: 'For members 18 and above',
     description: 'Leadership, Experience, Opportunity — empowering young adults to serve.',
-    color: 'from-purple-600 to-pink-500',
   },
 } as const
 
