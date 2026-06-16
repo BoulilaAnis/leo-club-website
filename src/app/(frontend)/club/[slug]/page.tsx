@@ -40,9 +40,9 @@ export default async function ClubPage({
   })
 
   return (
-    <div className="mx-auto max-w-6xl space-y-16 p-4 py-12">
+    <div className="mx-auto max-w-6xl space-y-10 p-4 py-12 md:space-y-16">
       <section className="text-center">
-        <h1 className="mb-4 text-5xl font-bold tracking-tight">{club.name}</h1>
+        <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">{club.name}</h1>
         <p className="text-lg text-muted-foreground">{club.tagline}</p>
         <p className="mx-auto mt-2 max-w-2xl text-muted-foreground">{club.description}</p>
       </section>
@@ -80,9 +80,9 @@ export default async function ClubPage({
           <div className="space-y-10">
             {history.map((entry) => (
               <div key={entry.id} className="border-l-2 pl-6">
-                <div className="flex items-baseline gap-3">
-                  <span className="text-sm font-semibold text-muted-foreground">{entry.year}</span>
-                  <h3 className="text-xl font-semibold">{entry.title}</h3>
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-3">
+                  <span className="text-xs font-semibold text-muted-foreground sm:text-sm">{entry.year}</span>
+                  <h3 className="text-lg font-semibold sm:text-xl">{entry.title}</h3>
                 </div>
                 {entry.description && (
                   <div className="prose prose-sm prose-gray mt-2 max-w-none dark:prose-invert">

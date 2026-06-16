@@ -48,7 +48,7 @@ export default async function EventDetailPage({
           )}
         </div>
 
-        <h1 className="text-4xl font-bold tracking-tight">{event.title}</h1>
+        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{event.title}</h1>
 
         {event.location && (
           <p className="text-lg text-muted-foreground">{event.location}</p>

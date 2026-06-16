@@ -57,7 +57,7 @@ export default async function EventsPage({
     <div className="mx-auto max-w-4xl space-y-12 p-4 py-12">
       <div className="space-y-2">
         <Link href={`/club/${slug}`} className="text-sm text-muted-foreground hover:text-foreground">&larr; Back to {club.name}</Link>
-        <h1 className="text-4xl font-bold tracking-tight">Events</h1>
+        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Events</h1>
       </div>
 
       {upcoming.length > 0 && (

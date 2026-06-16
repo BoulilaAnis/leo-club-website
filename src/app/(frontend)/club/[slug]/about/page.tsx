@@ -43,13 +43,13 @@ export default async function AboutPage({
   return (
     <div className="mx-auto max-w-4xl space-y-12 p-4 py-12">
       <div className="space-y-2">
-        <h1 className="text-4xl font-bold tracking-tight">About {club.name}</h1>
+        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">About {club.name}</h1>
         <p className="text-lg text-muted-foreground">{club.tagline}</p>
       </div>
 
       <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground">{club.description}</p>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="text-sm font-medium text-muted-foreground">Active Members</CardTitle>
