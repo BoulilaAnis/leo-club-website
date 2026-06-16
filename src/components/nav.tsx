@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
 import type { MemberUser } from '@/lib/auth'
 import { AnimatedThemeToggler } from './ui/animated-theme-toggler'
 
@@ -24,6 +26,7 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
   const pathname = usePathname()
   if (pathname === '/') return null
   const ctx = detectContext(pathname)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   function logo() {
     if (ctx === 'default') {
@@ -125,20 +128,37 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
   return (
     <header className="border-b">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <div className='flex justify-between items-center'>
-          <div className='bg-secondary mr-4 flex justify-center items-center rounded-lg p-1'>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center rounded-lg bg-secondary p-1">
             <AnimatedThemeToggler />
           </div>
           {logo()}
         </div>
-        <div className="relative">
+        <div className="relative hidden md:block">
           <Link className="text-primary text-3xl" href="/">
             Leo Club
           </Link>
           <span className="absolute bottom-0 left-0 h-0.5 w-full bg-primary animate-caret-blink" />
         </div>
-        <div className="flex items-center gap-4 text-sm">{links()}</div>
+        <div className="hidden items-center gap-4 text-sm md:flex">{links()}</div>
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="flex size-9 items-center justify-center md:hidden"
+          aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'}
+        >
+          {mobileOpen ? <X /> : <Menu />}
+        </button>
       </nav>
+      {mobileOpen && (
+        <div className="border-t bg-background px-4 py-4 md:hidden">
+          <div className="flex flex-col gap-3" onClick={() => setMobileOpen(false)}>
+            <Link className="text-primary text-lg font-semibold" href="/">
+              Leo Club
+            </Link>
+            {links()}
+          </div>
+        </div>
+      )}
     </header>
   )
 }
