@@ -24,6 +24,10 @@ export async function POST(req: Request) {
       data: { username, password },
     })
 
+    if (!token) {
+      return Response.json({ error: 'Login failed' }, { status: 401 })
+    }
+
     const cookieStore = await cookies()
     cookieStore.set('member-token', token, {
       httpOnly: true,
