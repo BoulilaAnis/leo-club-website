@@ -10,9 +10,7 @@ export default function HomePage() {
   return (
     <div className="mx-auto max-w-6xl space-y-16 p-4 py-12">
       <section className="text-center">
-        <h1 className="mb-4 text-5xl font-bold tracking-tight">
-          Leo Club
-        </h1>
+        <h1 className="mb-4 text-5xl font-bold tracking-tight">Leo Club</h1>
         <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
           Leadership, Experience, Opportunity. Choose your path below.
         </p>
@@ -31,9 +29,6 @@ export default function HomePage() {
                 className={`relative overflow-hidden border-2 transition-all hover:shadow-lg hover:-translate-y-1
                   ${club.slug === 'alpha' ? 'hover:border-blue-500' : 'hover:border-purple-500'}`}
               >
-                <div
-                  className={`h-2 bg-gradient-to-r ${club.color}`}
-                />
                 <CardHeader>
                   <CardTitle className="text-3xl">{club.name}</CardTitle>
                   <CardDescription className="text-base">{club.tagline}</CardDescription>
@@ -42,9 +37,11 @@ export default function HomePage() {
                   <p className="text-muted-foreground">{club.description}</p>
                   <Button
                     variant="outline"
-                    className={`w-full ${club.slug === 'alpha'
-                      ? 'hover:bg-blue-50 hover:text-blue-700'
-                      : 'hover:bg-purple-50 hover:text-purple-700'}`}
+                    className={`w-full ${
+                      club.slug === 'alpha'
+                        ? 'hover:bg-blue-50 hover:text-blue-700'
+                        : 'hover:bg-purple-50 hover:text-purple-700'
+                    }`}
                   >
                     Enter {club.name}
                   </Button>
