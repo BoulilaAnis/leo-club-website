@@ -1,18 +1,5 @@
 import type { CollectionConfig } from 'payload'
-
-function restrictToClub(user: { club?: string | null } | null | undefined) {
-  if (user?.club === 'alpha' || user?.club === 'omega') {
-    return { club: { equals: user.club } }
-  }
-  return false
-}
-
-function restrictToSelf(user: { id?: string | null } | null | undefined) {
-  if (user?.id) {
-    return { id: { equals: user.id } }
-  }
-  return false
-}
+import { restrictToClub, restrictToSelf } from '@/lib/access'
 
 export const Members: CollectionConfig = {
   slug: 'members',

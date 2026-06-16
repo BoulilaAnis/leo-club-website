@@ -1,11 +1,5 @@
 import type { CollectionConfig } from 'payload'
-
-function restrictToClub(user: { club?: string | null } | null | undefined) {
-  if (user?.club === 'alpha' || user?.club === 'omega') {
-    return { club: { equals: user.club } }
-  }
-  return false
-}
+import { restrictToClub } from '@/lib/access'
 
 async function recalculateScore(payload: any, memberId: string) {
   const { docs: adjustments } = await payload.find({
