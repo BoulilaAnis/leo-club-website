@@ -3,9 +3,12 @@ import type { Access } from 'payload'
 type UserWithClub = { club?: string | null }
 type UserWithId = { id?: string | null }
 
-export function restrictToClub(user: UserWithClub | null | undefined) {
+export function restrictToClub(user: UserWithClub & { collection?: string } | null | undefined) {
   if (user?.club === 'alpha' || user?.club === 'omega') {
     return { club: { equals: user.club } }
+  }
+  if (user?.collection === 'users' && !user?.club) {
+    return true
   }
   return false
 }
