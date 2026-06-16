@@ -34,12 +34,13 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
     }
     return (
       <div className="flex items-baseline gap-2">
-        <Link href={`/club/${ctx.slug}`} className={`text-xl font-bold tracking-tight ${CLUB_INFO[ctx.slug].color}`}>
+        <Link
+          href={`/club/${ctx.slug}`}
+          className={`text-xl font-bold tracking-tight ${CLUB_INFO[ctx.slug].color}`}
+        >
           {CLUB_INFO[ctx.slug].name}
         </Link>
-        <span className="hidden text-xs text-muted-foreground sm:inline">
-          Leo Club Klibia
-        </span>
+        <span className="hidden text-xs text-muted-foreground sm:inline">Leo Club Klibia</span>
       </div>
     )
   }
@@ -48,9 +49,15 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
     if (ctx === 'default') {
       return (
         <>
-          <Link href="/" className="hover:underline">Home</Link>
-          <Link href="/club/alpha" className="hover:underline">Alpha</Link>
-          <Link href="/club/omega" className="hover:underline">Omega</Link>
+          <Link href="/" className="hover:underline">
+            Home
+          </Link>
+          <Link href="/club/alpha" className="hover:underline">
+            Alpha
+          </Link>
+          <Link href="/club/omega" className="hover:underline">
+            Omega
+          </Link>
         </>
       )
     }
@@ -58,9 +65,15 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
     if (ctx.area === 'public') {
       return (
         <>
-          <Link href={`/club/${ctx.slug}`} className="hover:underline">Home</Link>
-          <Link href={`/club/${ctx.slug}/events`} className="hover:underline">Events</Link>
-          <Link href={`/club/${ctx.slug}/about`} className="hover:underline">About</Link>
+          <Link href={`/club/${ctx.slug}`} className="hover:underline">
+            Home
+          </Link>
+          <Link href={`/club/${ctx.slug}/events`} className="hover:underline">
+            Events
+          </Link>
+          <Link href={`/club/${ctx.slug}/about`} className="hover:underline">
+            About
+          </Link>
           <Link
             href={`/club/${ctx.slug}/login`}
             className="rounded-md bg-foreground px-3 py-1.5 text-background text-sm font-medium hover:opacity-90"
@@ -76,10 +89,16 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
         <Link href={`/club/${ctx.slug}`} className="text-muted-foreground hover:text-foreground">
           Home
         </Link>
-        <Link href={`/club/${ctx.slug}/members`} className="text-muted-foreground hover:text-foreground">
+        <Link
+          href={`/club/${ctx.slug}/members`}
+          className="text-muted-foreground hover:text-foreground"
+        >
           Dashboard
         </Link>
-        <Link href={`/club/${ctx.slug}/members/search`} className="text-muted-foreground hover:text-foreground">
+        <Link
+          href={`/club/${ctx.slug}/members/search`}
+          className="text-muted-foreground hover:text-foreground"
+        >
           Members
         </Link>
         {user && (
@@ -106,9 +125,13 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
     <header className="border-b">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         {logo()}
-        <div className="flex items-center gap-4 text-sm">
-          {links()}
+        <div className="relative">
+          <Link className="text-primary text-3xl" href="/">
+            Leo Club
+          </Link>
+          <span className="absolute bottom-0 left-0 h-0.5 w-full bg-primary animate-caret-blink" />
         </div>
+        <div className="flex items-center gap-4 text-sm">{links()}</div>
       </nav>
     </header>
   )
