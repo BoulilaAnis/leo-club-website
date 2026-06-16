@@ -61,7 +61,9 @@ export default async function MemberProfilePage({
             {member.firstName} {member.lastName}
           </h1>
           <p className="text-muted-foreground">
-            {(member.position as any)?.name}
+            {member.position && typeof member.position === 'object'
+              ? member.position.name
+              : ''}
           </p>
         </div>
       </div>

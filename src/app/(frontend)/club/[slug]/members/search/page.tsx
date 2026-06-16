@@ -11,7 +11,7 @@ interface MemberResult {
   firstName: string
   lastName: string
   username: string
-  position: string
+  position: string | { name: string } | null
   score: number
   club: string
 }
@@ -85,7 +85,9 @@ export default function MemberSearchPage() {
                 </CardHeader>
                 <CardContent className="space-y-1 text-sm text-muted-foreground">
                   <p>@{member.username}</p>
-                  <p>{POSITION_LABELS[member.position] || member.position}</p>
+                  <p>{typeof member.position === 'object' && member.position !== null
+                    ? member.position.name
+                    : POSITION_LABELS[member.position as string] || member.position}</p>
                   <p>Score: {member.score}</p>
                 </CardContent>
               </Card>
