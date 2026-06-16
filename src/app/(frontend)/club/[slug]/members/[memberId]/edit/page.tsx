@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { authedFetch } from '@/lib/client-auth'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -69,6 +70,9 @@ export default function EditProfilePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-4 py-12">
+      <Link href={`/club/${slug}/members/${memberId}`} className="text-sm text-muted-foreground hover:text-foreground">
+        &larr; Back to Profile
+      </Link>
       <h1 className="text-3xl font-bold">Edit Profile</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -123,14 +127,15 @@ export default function EditProfilePage() {
 
         {error && <p className="text-sm text-red-500">{error}</p>}
 
-        <div className="flex gap-3">
-          <Button type="submit" disabled={saving}>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Button type="submit" disabled={saving} className="w-full sm:w-auto">
             {saving ? 'Saving...' : 'Save Changes'}
           </Button>
           <Button
             type="button"
             variant="outline"
             onClick={() => router.push(`/club/${slug}/members/${memberId}`)}
+            className="w-full sm:w-auto"
           >
             Cancel
           </Button>

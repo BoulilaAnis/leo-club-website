@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { authedFetch } from '@/lib/client-auth'
@@ -57,6 +58,9 @@ export default function MemberSearchPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-4">
+      <Link href={`/club/${slug}/members`} className="text-sm text-muted-foreground hover:text-foreground">
+        &larr; Back to Dashboard
+      </Link>
       <h1 className="text-3xl font-bold">Members</h1>
 
       <Input

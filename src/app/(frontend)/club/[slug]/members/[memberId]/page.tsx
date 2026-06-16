@@ -52,6 +52,9 @@ export default async function MemberProfilePage({
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-4">
+      <Link href={`/club/${slug}/members`} className="text-sm text-muted-foreground hover:text-foreground">
+        &larr; Back to Dashboard
+      </Link>
       <div className="flex items-center gap-4">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-2xl font-bold text-muted-foreground">
           {member.firstName[0]}{member.lastName[0]}
@@ -139,8 +142,8 @@ export default async function MemberProfilePage({
       )}
 
       {isOwnProfile && (
-        <Link href={`/club/${slug}/members/${member.id}/edit`}>
-          <Button>Edit Profile</Button>
+        <Link href={`/club/${slug}/members/${member.id}/edit`} className="block sm:inline-block">
+          <Button className="w-full sm:w-auto">Edit Profile</Button>
         </Link>
       )}
 

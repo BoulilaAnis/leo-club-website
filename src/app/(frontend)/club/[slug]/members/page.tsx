@@ -1,13 +1,15 @@
 import Link from 'next/link'
 import { getMemberUser } from '@/lib/auth'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 
 export default async function MembersDashboard() {
   const user = await getMemberUser()
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 p-4">
+      <Link href={`/club/${user?.club}`} className="text-sm text-muted-foreground hover:text-foreground">
+        &larr; Back to Club
+      </Link>
       <h1 className="text-3xl font-bold">
         Welcome, {user?.firstName}!
       </h1>
