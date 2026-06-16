@@ -4,8 +4,19 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { headers as getHeaders } from 'next/headers'
 import { getMemberUser } from '@/lib/auth'
+import { cn } from '@/lib/utils'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import {
+  Timeline,
+  TimelineContent,
+  TimelineDate,
+  TimelineHeader,
+  TimelineIndicator,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineTitle,
+} from '@/components/reui/timeline'
 
 export default async function MemberProfilePage({
   params,
@@ -78,30 +89,39 @@ export default async function MemberProfilePage({
       </div>
 
       <section>
-        <h2 className="mb-4 text-2xl font-semibold">Score History</h2>
+        <h2 className="mb-6 text-2xl font-semibold">Score History</h2>
         {adjustments.length === 0 ? (
           <p className="text-sm text-muted-foreground">No score changes yet.</p>
         ) : (
-          <div className="space-y-4">
-            {adjustments.map((adj) => (
-              <div key={adj.id} className="border-l-2 pl-4">
-                <div className="flex items-baseline gap-2">
-                  <span className={`text-lg font-bold ${(adj.amount as number) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {(adj.amount as number) >= 0 ? '+' : ''}{adj.amount as number}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(adj.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </span>
-                  {(adj.createdBy as any)?.email && (
-                    <span className="text-xs text-muted-foreground">
-                      by {(adj.createdBy as any).email as string}
-                    </span>
-                  )}
-                </div>
-                <p className="mt-1 text-sm text-muted-foreground">{adj.reason as string}</p>
-              </div>
-            ))}
-          </div>
+          <Timeline defaultValue={adjustments.length}>
+            {adjustments.map((adj, i) => {
+              const amount = adj.amount as number
+              const isPositive = amount >= 0
+
+              return (
+                <TimelineItem key={adj.id} step={i + 1}>
+                  <TimelineHeader>
+                    <TimelineDate>
+                      {new Date(adj.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </TimelineDate>
+                    <TimelineTitle className={cn(isPositive ? 'text-green-600' : 'text-red-600', 'font-bold')}>
+                      {isPositive ? '+' : ''}{amount}
+                    </TimelineTitle>
+                  </TimelineHeader>
+                  <TimelineIndicator />
+                  <TimelineSeparator />
+                  <TimelineContent>
+                    <p>{adj.reason as string}</p>
+                    {(adj.createdBy as any)?.email && (
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        by {(adj.createdBy as any).email as string}
+                      </p>
+                    )}
+                  </TimelineContent>
+                </TimelineItem>
+              )
+            })}
+          </Timeline>
         )}
       </section>
 
