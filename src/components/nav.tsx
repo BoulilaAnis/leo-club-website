@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { MemberUser } from '@/lib/auth'
+import { AnimatedThemeToggler } from './ui/animated-theme-toggler'
 
 const CLUB_INFO = {
   alpha: { name: 'Alpha Club', tagline: '-18', color: 'text-blue-600' },
@@ -124,7 +125,12 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
   return (
     <header className="border-b">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        {logo()}
+        <div className='flex justify-between items-center'>
+          <div className='bg-secondary mr-4 flex justify-center items-center rounded-lg p-1'>
+            <AnimatedThemeToggler />
+          </div>
+          {logo()}
+        </div>
         <div className="relative">
           <Link className="text-primary text-3xl" href="/">
             Leo Club
