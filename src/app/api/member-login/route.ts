@@ -1,5 +1,6 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { cookies } from 'next/headers'
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -23,7 +24,16 @@ export async function POST(req: Request) {
       data: { username, password },
     })
 
-    return Response.json({ token, user })
+    const cookieStore = await cookies()
+    cookieStore.set('member-token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7200,
+      path: '/',
+    })
+
+    return Response.json({ user })
   } catch {
     return Response.json({ error: 'Invalid credentials' }, { status: 401 })
   }

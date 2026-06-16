@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useState } from 'react'
 import { motion } from 'motion/react'
@@ -14,11 +13,6 @@ export default function ClubLoginPage() {
   const router = useRouter()
   const params = useParams()
   const slug = params.slug as string
-
-  useEffect(() => {
-    document.cookie =
-      'payload-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-  }, [])
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -40,13 +34,6 @@ export default function ClubLoginPage() {
       if (!res.ok) {
         throw new Error('Invalid credentials')
       }
-
-      const { token } = await res.json()
-
-      document.cookie =
-        'payload-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
-      document.cookie =
-        `member-token=${token}; path=/; max-age=7200; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`
 
       router.push(`/club/${slug}/members`)
     } catch (err) {
