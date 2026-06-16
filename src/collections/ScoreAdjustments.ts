@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { restrictToClub } from '@/lib/access'
 import { clubField } from '@/lib/fields'
+import { autoSetClub } from '@/lib/hooks'
 
 async function recalculateScore(payload: any, memberId: string) {
   const { docs: adjustments } = await payload.find({
@@ -30,13 +31,10 @@ export const ScoreAdjustments: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
+      autoSetClub,
       ({ data, req: { user }, operation }) => {
         if (operation === 'create') {
-          return {
-            ...data,
-            club: user?.club || data.club,
-            createdBy: user?.id,
-          }
+          return { ...data, createdBy: user?.id }
         }
         return data
       },

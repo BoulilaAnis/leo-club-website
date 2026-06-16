@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { restrictToClub, restrictToSelf } from '@/lib/access'
 import { clubField } from '@/lib/fields'
+import { autoSetClub } from '@/lib/hooks'
 
 export const Members: CollectionConfig = {
   slug: 'members',
@@ -26,14 +27,7 @@ export const Members: CollectionConfig = {
         return data
       },
     ],
-    beforeChange: [
-      ({ data, req: { user }, operation }) => {
-        if (operation === 'create' && user?.collection === 'users' && user.club) {
-          return { ...data, club: user.club }
-        }
-        return data
-      },
-    ],
+    beforeChange: [autoSetClub],
   },
   access: {
     read: ({ req: { user } }) => {

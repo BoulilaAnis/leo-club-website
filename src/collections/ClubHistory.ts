@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { clubField } from '@/lib/fields'
+import { autoSetClub } from '@/lib/hooks'
 
 export const ClubHistory: CollectionConfig = {
   slug: 'club-history',
@@ -10,14 +11,7 @@ export const ClubHistory: CollectionConfig = {
     description: 'Historical milestones and achievements shown in the club timeline',
   },
   hooks: {
-    beforeChange: [
-      ({ data, req: { user }, operation }) => {
-        if (operation === 'create' && user?.collection === 'users' && user.club) {
-          return { ...data, club: user.club }
-        }
-        return data
-      },
-    ],
+    beforeChange: [autoSetClub],
   },
   access: {
     read: () => true,

@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { clubField } from '@/lib/fields'
+import { autoSetClub } from '@/lib/hooks'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -10,14 +11,7 @@ export const Events: CollectionConfig = {
     description: 'Public events shown on the club page — meetings, socials, service projects, and more',
   },
   hooks: {
-    beforeChange: [
-      ({ data, req: { user }, operation }) => {
-        if (operation === 'create' && user?.collection === 'users' && user.club) {
-          return { ...data, club: user.club }
-        }
-        return data
-      },
-    ],
+    beforeChange: [autoSetClub],
   },
   access: {
     read: () => true,
