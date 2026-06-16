@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { restrictToClub, restrictToSelf } from '@/lib/access'
+import { clubField } from '@/lib/fields'
 
 export const Members: CollectionConfig = {
   slug: 'members',
@@ -69,19 +70,7 @@ export const Members: CollectionConfig = {
         return true
       },
     },
-    {
-      name: 'club',
-      type: 'select',
-      required: true,
-      options: [
-        { label: 'Alpha (-18)', value: 'alpha' },
-        { label: 'Omega (18+)', value: 'omega' },
-      ],
-      admin: {
-        position: 'sidebar',
-        description: 'Auto-set based on your admin account',
-      },
-    },
+    clubField,
     {
       name: 'firstName',
       type: 'text',

@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { restrictToClub } from '@/lib/access'
+import { clubField } from '@/lib/fields'
 
 async function recalculateScore(payload: any, memberId: string) {
   const { docs: adjustments } = await payload.find({
@@ -87,20 +88,7 @@ export const ScoreAdjustments: CollectionConfig = {
         description: 'The member whose score will be adjusted',
       },
     },
-    {
-      name: 'club',
-      type: 'select',
-      required: true,
-      options: [
-        { label: 'Alpha (-18)', value: 'alpha' },
-        { label: 'Omega (18+)', value: 'omega' },
-      ],
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-        description: 'Auto-set based on your admin account',
-      },
-    },
+    clubField,
     {
       name: 'amount',
       type: 'number',
