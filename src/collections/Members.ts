@@ -59,10 +59,6 @@ export const Members: CollectionConfig = {
       admin: {
         hidden: true,
       },
-      validate: (value: string | null | undefined) => {
-        if (!value) return true
-        return true
-      },
     },
     clubField,
     {
