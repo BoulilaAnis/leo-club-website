@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { getClub } from '@/lib/club'
@@ -93,11 +94,16 @@ export default async function ClubPage({
                   <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
                     {(entry.images as { image: { url: string }; caption?: string }[]).map((img, i) => (
                       <figure key={i} className="shrink-0">
-                        <img
-                          src={img.image?.url}
-                          alt={img.caption || ''}
-                          className="h-32 w-48 rounded-lg object-cover"
-                        />
+                        {img.image?.url && (
+                          <Image
+                            src={img.image.url}
+                            alt={img.caption || ''}
+                            width={192}
+                            height={128}
+                            className="h-32 w-48 rounded-lg object-cover"
+                            sizes="192px"
+                          />
+                        )}
                         {img.caption && (
                           <figcaption className="mt-1 text-xs text-muted-foreground">{img.caption}</figcaption>
                         )}

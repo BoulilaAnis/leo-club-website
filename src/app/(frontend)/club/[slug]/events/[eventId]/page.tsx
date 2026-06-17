@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
@@ -56,11 +57,13 @@ export default async function EventDetailPage({
       </div>
 
       {event.image && (
-        <div className="aspect-video overflow-hidden rounded-xl bg-muted">
-          <img
+        <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
+          <Image
             src={typeof event.image === 'object' && 'url' in event.image ? event.image.url ?? '' : ''}
             alt={event.title}
-            className="h-full w-full object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 768px"
           />
         </div>
       )}
