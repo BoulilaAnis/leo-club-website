@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X, LogIn } from 'lucide-react'
+import { motion, AnimatePresence } from 'motion/react'
 import type { MemberUser } from '@/lib/auth'
 import { AnimatedThemeToggler } from './ui/animated-theme-toggler'
 
@@ -161,39 +162,47 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
           </button>
         </div>
       </nav>
-      {mobileOpen && (
-        <div className="border-t bg-background px-4 pb-4 pt-2 md:hidden">
-          <div className="flex flex-col gap-1" onClick={() => setMobileOpen(false)}>
-            {navLinks()}
-            {showLogin && (
-              <Link
-                href={`/club/${ctx.slug}/login`}
-                className={cn(linkClasses(`/club/${ctx.slug}/login`), 'gap-1.5')}
-              >
-                <LogIn className="size-4" />
-                Members
-              </Link>
-            )}
-            {showUser && (
-              <>
-                <span className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground">
-                  <span className="size-1.5 rounded-full bg-green-500" />
-                  {user.firstName} {user.lastName}
-                </span>
-                <button
-                  onClick={async () => {
-                    await fetch('/api/member-logout', { method: 'POST' })
-                    window.location.href = `/club/${ctx.slug}`
-                  }}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
+            className="border-t bg-background px-4 pb-4 pt-2 md:hidden overflow-hidden"
+          >
+            <div className="flex flex-col gap-1" onClick={() => setMobileOpen(false)}>
+              {navLinks()}
+              {showLogin && (
+                <Link
+                  href={`/club/${ctx.slug}/login`}
+                  className={cn(linkClasses(`/club/${ctx.slug}/login`), 'gap-1.5')}
                 >
-                  Logout
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+                  <LogIn className="size-4" />
+                  Members
+                </Link>
+              )}
+              {showUser && (
+                <>
+                  <span className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground">
+                    <span className="size-1.5 rounded-full bg-green-500" />
+                    {user.firstName} {user.lastName}
+                  </span>
+                  <button
+                    onClick={async () => {
+                      await fetch('/api/member-logout', { method: 'POST' })
+                      window.location.href = `/club/${ctx.slug}`
+                    }}
+                    className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   )
 }
