@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Avatar } from '@/components/ui/avatar'
 import { authedFetch } from '@/lib/client-auth'
 
 interface MemberResult {
@@ -12,6 +13,7 @@ interface MemberResult {
   firstName: string
   lastName: string
   username: string
+  avatar?: { url?: string } | string | null
   position: string | { name: string } | null
   score: number
   club: string
@@ -37,7 +39,7 @@ export default function MemberSearchPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    authedFetch('/api/members')
+    authedFetch('/api/members?depth=1')
       .then((res) => res.json())
       .then((data) => {
         setMembers(data.docs ?? [])
@@ -82,7 +84,12 @@ export default function MemberSearchPage() {
               className="w-full text-left"
             >
               <Card className="cursor-pointer transition-colors hover:bg-muted/50">
-                <CardHeader>
+                <CardHeader className="flex-row items-center gap-3 space-y-0">
+                  <Avatar
+                    src={typeof member.avatar === 'object' ? member.avatar?.url : null}
+                    fallback={`${member.firstName[0]}${member.lastName[0]}`}
+                    className="h-9 w-9 shrink-0 text-sm"
+                  />
                   <CardTitle className="text-base">
                     {member.firstName} {member.lastName}
                   </CardTitle>

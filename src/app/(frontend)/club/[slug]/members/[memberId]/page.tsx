@@ -7,6 +7,7 @@ import { getMemberUser } from '@/lib/auth'
 import { cn } from '@/lib/utils'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Avatar } from '@/components/ui/avatar'
 import {
   Timeline,
   TimelineContent,
@@ -41,6 +42,11 @@ export default async function MemberProfilePage({
 
   const isOwnProfile = member.id === currentUser.id
 
+  const avatarUrl =
+    typeof member.avatar === 'object' && member.avatar !== null && 'url' in member.avatar
+      ? member.avatar.url
+      : null
+
   const { docs: adjustments } = await payload.find({
     collection: 'score-adjustments',
     where: { member: { equals: memberId } },
@@ -52,21 +58,24 @@ export default async function MemberProfilePage({
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-4">
-      <Link href={`/club/${slug}/members`} className="text-sm text-muted-foreground hover:text-foreground">
+      <Link
+        href={`/club/${slug}/members`}
+        className="text-sm text-muted-foreground hover:text-foreground"
+      >
         &larr; Back to Dashboard
       </Link>
       <div className="flex items-center gap-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-2xl font-bold text-muted-foreground">
-          {member.firstName[0]}{member.lastName[0]}
-        </div>
+        <Avatar
+          src={avatarUrl}
+          fallback={`${member.firstName[0]}${member.lastName[0]}`}
+          className="h-16 w-16 text-2xl"
+        />
         <div>
           <h1 className="text-3xl font-bold">
             {member.firstName} {member.lastName}
           </h1>
           <p className="text-muted-foreground">
-            {member.position && typeof member.position === 'object'
-              ? member.position.name
-              : ''}
+            {member.position && typeof member.position === 'object' ? member.position.name : ''}
           </p>
         </div>
       </div>
@@ -107,10 +116,17 @@ export default async function MemberProfilePage({
                 <TimelineItem key={adj.id} step={i + 1}>
                   <TimelineHeader>
                     <TimelineDate>
-                      {new Date(adj.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {new Date(adj.createdAt).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}
                     </TimelineDate>
-                    <TimelineTitle className={cn(isPositive ? 'text-green-600' : 'text-red-600', 'font-bold')}>
-                      {isPositive ? '+' : ''}{amount}
+                    <TimelineTitle
+                      className={cn(isPositive ? 'text-green-600' : 'text-red-600', 'font-bold')}
+                    >
+                      {isPositive ? '+' : ''}
+                      {amount}
                     </TimelineTitle>
                   </TimelineHeader>
                   <TimelineIndicator />
@@ -147,9 +163,7 @@ export default async function MemberProfilePage({
         </Link>
       )}
 
-      {member.bio && (
-        <p className="text-muted-foreground whitespace-pre-wrap">{member.bio}</p>
-      )}
+      {member.bio && <p className="text-muted-foreground whitespace-pre-wrap">{member.bio}</p>}
     </div>
   )
 }
