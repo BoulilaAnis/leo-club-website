@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, LogIn } from 'lucide-react'
 import type { MemberUser } from '@/lib/auth'
 import { AnimatedThemeToggler } from './ui/animated-theme-toggler'
 
@@ -50,7 +50,7 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
     )
   }
 
-  function links() {
+  function navLinks() {
     if (ctx === 'default') {
       return (
         <>
@@ -85,12 +85,6 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
           >
             About
           </Link>
-          <Link
-            href={`/club/${ctx.slug}/login`}
-            className="rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
-          >
-            Members
-          </Link>
         </>
       )
     }
@@ -112,33 +106,51 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
         >
           Members
         </Link>
-        {user && (
-          <>
-            <span className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground">
-              <span className="hidden size-1.5 rounded-full bg-green-500 lg:inline-block" />
-              {user.firstName} {user.lastName}
-            </span>
-            <button
-              onClick={async () => {
-                await fetch('/api/member-logout', { method: 'POST' })
-                window.location.href = `/club/${ctx.slug}`
-              }}
-              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
-            >
-              Logout
-            </button>
-          </>
-        )}
       </>
     )
   }
+
+  function Separator() {
+    return <span className="mx-0.5 h-5 w-px bg-border" />
+  }
+
+  const showLogin = ctx !== 'default' && ctx.area === 'public'
+  const showUser = ctx !== 'default' && ctx.area === 'members' && user
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
         {logo()}
-        <div className="hidden items-center gap-1 md:flex">
-          {links()}
+        <div className="hidden items-center md:flex">
+          {navLinks()}
+          {(showLogin || showUser) && <Separator />}
+          {showLogin && (
+            <Link
+              href={`/club/${ctx.slug}/login`}
+              className={cn(linkClasses(`/club/${ctx.slug}/login`), 'gap-1.5')}
+            >
+              <LogIn className="size-4" />
+              Members
+            </Link>
+          )}
+          {showUser && (
+            <>
+              <span className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground">
+                <span className="size-1.5 rounded-full bg-green-500" />
+                {user.firstName}
+              </span>
+              <button
+                onClick={async () => {
+                  await fetch('/api/member-logout', { method: 'POST' })
+                  window.location.href = `/club/${ctx.slug}`
+                }}
+                className="rounded-md px-2 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+              >
+                Logout
+              </button>
+            </>
+          )}
+          <Separator />
           <AnimatedThemeToggler />
         </div>
         <div className="flex items-center gap-1 md:hidden">
@@ -155,7 +167,33 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
       {mobileOpen && (
         <div className="border-t bg-background px-4 pb-4 pt-2 md:hidden">
           <div className="flex flex-col gap-1" onClick={() => setMobileOpen(false)}>
-            {links()}
+            {navLinks()}
+            {showLogin && (
+              <Link
+                href={`/club/${ctx.slug}/login`}
+                className={cn(linkClasses(`/club/${ctx.slug}/login`), 'gap-1.5')}
+              >
+                <LogIn className="size-4" />
+                Members
+              </Link>
+            )}
+            {showUser && (
+              <>
+                <span className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground">
+                  <span className="size-1.5 rounded-full bg-green-500" />
+                  {user.firstName} {user.lastName}
+                </span>
+                <button
+                  onClick={async () => {
+                    await fetch('/api/member-logout', { method: 'POST' })
+                    window.location.href = `/club/${ctx.slug}`
+                  }}
+                  className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                >
+                  Logout
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
