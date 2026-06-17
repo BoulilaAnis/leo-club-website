@@ -121,7 +121,7 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
         {logo()}
-        <div className="hidden items-center md:flex">
+        <div className="hidden items-center md:flex gap-1">
           {navLinks()}
           {(showLogin || showUser) && <Separator />}
           {showLogin && (
