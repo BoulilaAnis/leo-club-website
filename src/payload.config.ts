@@ -15,6 +15,10 @@ import { ScoreAdjustments } from "./collections/ScoreAdjustments";
 import { Positions } from "./collections/Positions";
 import { EventTypes } from "./collections/EventTypes";
 
+if (!process.env.PAYLOAD_SECRET) {
+  throw new Error('PAYLOAD_SECRET environment variable is required')
+}
+
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
@@ -36,7 +40,7 @@ export default buildConfig({
     EventTypes,
   ],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || "",
+  secret: process.env.PAYLOAD_SECRET,
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
