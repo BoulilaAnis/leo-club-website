@@ -1,5 +1,6 @@
 import React from "react";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getMemberUser } from "@/lib/auth";
 import Nav from "@/components/nav";
 import "./styles.css";
@@ -19,6 +20,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
         <Nav user={user} />
         <main>{children}</main>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
