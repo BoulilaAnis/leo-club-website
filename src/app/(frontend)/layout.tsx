@@ -15,7 +15,24 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   const user = await getMemberUser();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var theme = localStorage.getItem('theme');
+                if (!theme) {
+                  theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                if (theme === 'dark') {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-screen overflow-x-hidden bg-background text-foreground antialiased">
         <Nav user={user} />
         <main>{children}</main>
