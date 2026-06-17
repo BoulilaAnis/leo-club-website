@@ -7,11 +7,6 @@ import { Menu, X } from 'lucide-react'
 import type { MemberUser } from '@/lib/auth'
 import { AnimatedThemeToggler } from './ui/animated-theme-toggler'
 
-const CLUB_INFO = {
-  alpha: { name: 'Alpha Club', tagline: '-18', color: 'text-blue-600' },
-  omega: { name: 'Omega Club', tagline: '18+', color: 'text-purple-600' },
-} as const
-
 type NavContext = 'default' | { slug: 'alpha' | 'omega'; area: 'public' | 'members' }
 
 function detectContext(pathname: string): NavContext {
@@ -45,23 +40,13 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
   }
 
   function logo() {
-    if (ctx === 'default') {
-      return (
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          Leo Club Klibia
-        </Link>
-      )
-    }
     return (
-      <div className="flex items-baseline gap-2">
-        <Link
-          href={`/club/${ctx.slug}`}
-          className={`text-xl font-bold tracking-tight ${CLUB_INFO[ctx.slug].color}`}
-        >
-          {CLUB_INFO[ctx.slug].name}
-        </Link>
-        <span className="hidden text-xs text-muted-foreground sm:inline">Leo Club Klibia</span>
-      </div>
+      <Link
+        href={ctx === 'default' ? '/' : `/club/${ctx.slug}`}
+        className="text-lg font-bold tracking-tight"
+      >
+        Leo Club Klibia
+      </Link>
     )
   }
 
@@ -150,19 +135,22 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
-      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <div className="flex items-center gap-3">
+      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
+        {logo()}
+        <div className="hidden items-center gap-1 md:flex">
+          {links()}
           <AnimatedThemeToggler />
-          {logo()}
         </div>
-        <div className="hidden items-center gap-1 md:flex">{links()}</div>
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex size-9 items-center justify-center rounded-md transition-colors hover:bg-accent md:hidden"
-          aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'}
-        >
-          {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-        </button>
+        <div className="flex items-center gap-1 md:hidden">
+          <AnimatedThemeToggler />
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="flex size-9 items-center justify-center rounded-md transition-colors hover:bg-accent"
+            aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'}
+          >
+            {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
+        </div>
       </nav>
       {mobileOpen && (
         <div className="border-t bg-background px-4 pb-4 pt-2 md:hidden">
