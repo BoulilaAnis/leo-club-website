@@ -28,6 +28,22 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
   const ctx = detectContext(pathname)
   const [mobileOpen, setMobileOpen] = useState(false)
 
+  function isActive(href: string): boolean {
+    if (pathname === href) return true
+    if (href !== '/' && pathname.startsWith(href + '/')) return true
+    return false
+  }
+
+  function linkClasses(href: string, extra?: string) {
+    return cn(
+      'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+      isActive(href)
+        ? 'bg-accent text-accent-foreground'
+        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+      extra,
+    )
+  }
+
   function logo() {
     if (ctx === 'default') {
       return (
@@ -53,13 +69,13 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
     if (ctx === 'default') {
       return (
         <>
-          <Link href="/" className="hover:underline">
+          <Link href="/" className={linkClasses('/')}>
             Home
           </Link>
-          <Link href="/club/alpha" className="hover:underline">
+          <Link href="/club/alpha" className={linkClasses('/club/alpha')}>
             Alpha
           </Link>
-          <Link href="/club/omega" className="hover:underline">
+          <Link href="/club/omega" className={linkClasses('/club/omega')}>
             Omega
           </Link>
         </>
@@ -69,18 +85,24 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
     if (ctx.area === 'public') {
       return (
         <>
-          <Link href={`/club/${ctx.slug}`} className="hover:underline">
+          <Link href={`/club/${ctx.slug}`} className={linkClasses(`/club/${ctx.slug}`)}>
             Home
           </Link>
-          <Link href={`/club/${ctx.slug}/events`} className="hover:underline">
+          <Link
+            href={`/club/${ctx.slug}/events`}
+            className={linkClasses(`/club/${ctx.slug}/events`)}
+          >
             Events
           </Link>
-          <Link href={`/club/${ctx.slug}/about`} className="hover:underline">
+          <Link
+            href={`/club/${ctx.slug}/about`}
+            className={linkClasses(`/club/${ctx.slug}/about`)}
+          >
             About
           </Link>
           <Link
             href={`/club/${ctx.slug}/login`}
-            className="rounded-md bg-foreground px-3 py-1.5 text-background text-sm font-medium hover:opacity-90"
+            className="rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
           >
             Members
           </Link>
@@ -90,24 +112,25 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
 
     return (
       <>
-        <Link href={`/club/${ctx.slug}`} className="text-muted-foreground hover:text-foreground">
+        <Link href={`/club/${ctx.slug}`} className={linkClasses(`/club/${ctx.slug}`)}>
           Home
         </Link>
         <Link
           href={`/club/${ctx.slug}/members`}
-          className="text-muted-foreground hover:text-foreground"
+          className={linkClasses(`/club/${ctx.slug}/members`)}
         >
           Dashboard
         </Link>
         <Link
           href={`/club/${ctx.slug}/members/search`}
-          className="text-muted-foreground hover:text-foreground"
+          className={linkClasses(`/club/${ctx.slug}/members/search`)}
         >
           Members
         </Link>
         {user && (
           <>
-            <span className="text-sm text-muted-foreground">
+            <span className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground">
+              <span className="hidden size-1.5 rounded-full bg-green-500 lg:inline-block" />
               {user.firstName} {user.lastName}
             </span>
             <button
@@ -115,7 +138,7 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
                 await fetch('/api/member-logout', { method: 'POST' })
                 window.location.href = `/club/${ctx.slug}`
               }}
-              className="text-sm text-muted-foreground hover:text-foreground"
+              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
             >
               Logout
             </button>
@@ -126,39 +149,32 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
   }
 
   return (
-    <header className="border-b">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center rounded-lg bg-secondary p-1">
-            <AnimatedThemeToggler />
-          </div>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
+      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+        <div className="flex items-center gap-3">
+          <AnimatedThemeToggler />
           {logo()}
         </div>
-        <div className="relative hidden md:block">
-          <Link className="text-primary text-3xl" href="/">
-            Leo Club
-          </Link>
-          <span className="absolute bottom-0 left-0 h-0.5 w-full bg-primary animate-caret-blink" />
-        </div>
-        <div className="hidden items-center gap-4 text-sm md:flex">{links()}</div>
+        <div className="hidden items-center gap-1 md:flex">{links()}</div>
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex size-9 items-center justify-center md:hidden"
+          className="flex size-9 items-center justify-center rounded-md transition-colors hover:bg-accent md:hidden"
           aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'}
         >
-          {mobileOpen ? <X /> : <Menu />}
+          {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
       </nav>
       {mobileOpen && (
-        <div className="border-t bg-background px-4 py-4 md:hidden">
-          <div className="flex flex-col gap-3" onClick={() => setMobileOpen(false)}>
-            <Link className="text-primary text-lg font-semibold" href="/">
-              Leo Club
-            </Link>
+        <div className="border-t bg-background px-4 pb-4 pt-2 md:hidden">
+          <div className="flex flex-col gap-1" onClick={() => setMobileOpen(false)}>
             {links()}
           </div>
         </div>
       )}
     </header>
   )
+}
+
+function cn(...inputs: (string | false | undefined | null)[]): string {
+  return inputs.filter(Boolean).join(' ')
 }
