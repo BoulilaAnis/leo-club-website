@@ -32,8 +32,8 @@ export async function POST(req: Request) {
     cookieStore.set('payload-token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 2592000,
+      sameSite: 'strict',
+      maxAge: 86400,
       path: '/',
     })
 
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
       },
     })
   } catch (error) {
-    console.error('Member login failed:', error)
+    console.error('Member login failed:', error instanceof Error ? error.message : error)
     return Response.json({ error: 'Invalid credentials' }, { status: 401 })
   }
 }
