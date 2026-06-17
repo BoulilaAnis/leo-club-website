@@ -37,14 +37,21 @@ export default function MemberSearchPage() {
   const [members, setMembers] = useState<MemberResult[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState(false)
 
   useEffect(() => {
     authedFetch('/api/members?depth=1')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch members')
+        return res.json()
+      })
       .then((data) => {
         setMembers(data.docs ?? [])
       })
-      .catch(() => {})
+      .catch((err) => {
+        console.error('Failed to load members:', err)
+        setFetchError(true)
+      })
       .finally(() => setLoading(false))
   }, [])
 
@@ -73,6 +80,8 @@ export default function MemberSearchPage() {
 
       {loading ? (
         <p className="text-muted-foreground">Loading...</p>
+      ) : fetchError ? (
+        <p className="text-sm text-destructive">Failed to load members. Please try again.</p>
       ) : filtered.length === 0 ? (
         <p className="text-muted-foreground">No members found.</p>
       ) : (

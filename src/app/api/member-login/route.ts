@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       data: { username, password },
     })
 
-    if (!token) {
+    if (!token || !user) {
       return Response.json({ error: 'Login failed' }, { status: 401 })
     }
 
@@ -37,8 +37,17 @@ export async function POST(req: Request) {
       path: '/',
     })
 
-    return Response.json({ user })
-  } catch {
+    return Response.json({
+      user: {
+        id: user.id,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        club: user.club,
+      },
+    })
+  } catch (error) {
+    console.error('Member login failed:', error)
     return Response.json({ error: 'Invalid credentials' }, { status: 401 })
   }
 }

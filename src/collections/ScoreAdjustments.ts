@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import type { ScoreAdjustment } from '@/payload-types'
 import { restrictToClub } from '@/lib/access'
 import { clubField } from '@/lib/fields'
 import { autoSetClub } from '@/lib/hooks'
@@ -11,7 +12,7 @@ async function recalculateScore(payload: any, memberId: string) {
     limit: 10000,
   })
 
-  const total = adjustments.reduce((sum: number, adj: any) => sum + (adj.amount || 0), 0)
+  const total = adjustments.reduce((sum: number, adj: ScoreAdjustment) => sum + (adj.amount ?? 0), 0)
 
   await payload.update({
     collection: 'members',

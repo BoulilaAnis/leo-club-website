@@ -5,14 +5,10 @@ import { motion } from 'motion/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CLUBS } from '@/lib/club'
-import { AnimatedThemeToggler } from '@/components/ui/animated-theme-toggler'
 
 export default function HomePage() {
   return (
     <div className="mx-auto max-w-6xl space-y-10 p-4 py-12 md:space-y-16">
-      <div>
-        <AnimatedThemeToggler/>
-      </div>
       <section className="text-center">
         <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">Leo Club</h1>
         <p className="mx-auto max-w-2xl text-lg text-muted-foreground">

@@ -5,6 +5,7 @@ import config from '@/payload.config'
 import { headers as getHeaders } from 'next/headers'
 import { getMemberUser } from '@/lib/auth'
 import { cn } from '@/lib/utils'
+import type { User } from '@/payload-types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Avatar } from '@/components/ui/avatar'
@@ -133,9 +134,9 @@ export default async function MemberProfilePage({
                   <TimelineSeparator />
                   <TimelineContent>
                     <p>{adj.reason as string}</p>
-                    {(adj.createdBy as any)?.email && (
+                    {typeof adj.createdBy === 'object' && adj.createdBy !== null && (adj.createdBy as User).email && (
                       <p className="mt-1 text-xs text-muted-foreground">
-                        by {(adj.createdBy as any).email as string}
+                        by {(adj.createdBy as User).email}
                       </p>
                     )}
                   </TimelineContent>

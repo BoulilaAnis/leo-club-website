@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X, LogIn } from 'lucide-react'
 import type { MemberUser } from '@/lib/auth'
+import { cn } from '@/lib/utils'
 import { AnimatedThemeToggler } from './ui/animated-theme-toggler'
 
 type NavContext = 'default' | { slug: 'alpha' | 'omega'; area: 'public' | 'members' }
@@ -148,13 +149,14 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
             </>
           )}
           <Separator />
-          <AnimatedThemeToggler />
+          <AnimatedThemeToggler aria-label="Toggle theme" />
         </div>
         <div className="flex items-center gap-1 md:hidden">
-          <AnimatedThemeToggler />
+          <AnimatedThemeToggler aria-label="Toggle theme" />
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="flex size-9 items-center justify-center rounded-md transition-colors hover:bg-accent"
+            aria-expanded={mobileOpen}
             aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'}
           >
             {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -196,8 +198,4 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
       )}
     </header>
   )
-}
-
-function cn(...inputs: (string | false | undefined | null)[]): string {
-  return inputs.filter(Boolean).join(' ')
 }

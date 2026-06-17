@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { getClub } from '@/lib/club'
+import type { ClubHistory } from '@/payload-types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
@@ -92,11 +93,15 @@ export default async function ClubPage({
                 )}
                 {entry.images && entry.images.length > 0 && (
                   <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
-                    {(entry.images as { image: { url: string }; caption?: string }[]).map((img, i) => (
-                      <figure key={i} className="shrink-0">
-                        {img.image?.url && (
+                    {(entry.images ?? []).map((img) => {
+                    const imageUrl = typeof img.image === 'object' && img.image !== null && 'url' in img.image
+                      ? img.image.url
+                      : null
+                    return (
+                      <figure key={img.id ?? img.caption ?? ''} className="shrink-0">
+                        {imageUrl && (
                           <Image
-                            src={img.image.url}
+                            src={imageUrl}
                             alt={img.caption || ''}
                             width={192}
                             height={128}
@@ -108,7 +113,8 @@ export default async function ClubPage({
                           <figcaption className="mt-1 text-xs text-muted-foreground">{img.caption}</figcaption>
                         )}
                       </figure>
-                    ))}
+                    )
+                  })}
                   </div>
                 )}
               </div>
