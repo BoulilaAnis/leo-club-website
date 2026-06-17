@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isClubAdmin } from '@/lib/access'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -9,6 +10,9 @@ export const Media: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isClubAdmin,
+    update: isClubAdmin,
+    delete: isClubAdmin,
   },
   fields: [
     {
@@ -17,5 +21,7 @@ export const Media: CollectionConfig = {
       required: true,
     },
   ],
-  upload: true,
+  upload: {
+    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+  },
 }
