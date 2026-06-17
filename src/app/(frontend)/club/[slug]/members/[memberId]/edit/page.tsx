@@ -30,12 +30,35 @@ export default function EditProfilePage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    authedFetch(`/api/members/${memberId}`)
-      .then((res) => res.json())
-      .then((d) => setData(d))
-      .catch(() => setError('Failed to load profile'))
-      .finally(() => setLoading(false))
-  }, [memberId])
+    let cancelled = false
+
+    async function load() {
+      try {
+        const [memberRes, meRes] = await Promise.all([
+          authedFetch(`/api/members/${memberId}`),
+          authedFetch('/api/me'),
+        ])
+
+        if (!meRes.ok) throw new Error('Not authenticated')
+
+        const { user: currentUser } = await meRes.json()
+        if (currentUser.id !== memberId) {
+          router.replace(`/club/${slug}/members`)
+          return
+        }
+
+        const member = await memberRes.json()
+        if (!cancelled) setData(member)
+      } catch {
+        if (!cancelled) setError('Failed to load profile')
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    load()
+    return () => { cancelled = true }
+  }, [memberId, slug, router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
