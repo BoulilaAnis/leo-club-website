@@ -1,18 +1,18 @@
-import type { CollectionConfig } from 'payload'
-import type { ScoreAdjustment } from '@/payload-types'
+import type { CollectionConfig, Payload } from 'payload'
 import { restrictToClub } from '@/lib/access'
 import { clubField } from '@/lib/fields'
 import { autoSetClub } from '@/lib/hooks'
 
-async function recalculateScore(payload: any, memberId: string) {
+async function recalculateScore(payload: Payload, memberId: string) {
   const { docs: adjustments } = await payload.find({
     collection: 'score-adjustments',
     where: { member: { equals: memberId } },
     depth: 0,
     limit: 10000,
+    select: { amount: true },
   })
 
-  const total = adjustments.reduce((sum: number, adj: ScoreAdjustment) => sum + (adj.amount ?? 0), 0)
+  const total = adjustments.reduce((sum, adj) => sum + (adj.amount ?? 0), 0)
 
   await payload.update({
     collection: 'members',

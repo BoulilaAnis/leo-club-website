@@ -48,6 +48,7 @@ export const Users: CollectionConfig = {
         position: 'sidebar',
         description: 'Leave empty for super admin access to both clubs',
       },
+      saveToJWT: true,
     },
   ],
 }

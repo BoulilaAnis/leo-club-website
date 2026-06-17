@@ -14,4 +14,5 @@ export const clubField: Field = {
     position: 'sidebar',
     description: 'Auto-set based on your admin account',
   },
+  saveToJWT: true,
 }
