@@ -1,67 +1,139 @@
-# Payload Blank Template
+# Leo Club Klibia
 
-This template comes configured with the bare minimum to get started on anything you need.
+A full-featured club management platform for Leo Club Klibia built with Next.js and Payload CMS. Manages two clubs — Alpha (-18) and Omega (18+) — with member accounts, events, score tracking, and public-facing pages.
 
-## Quick start
+## Features
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+- **Dual club system** — Independent Alpha (under 18) and Omega (18+) clubs with separate members, events, and history
+- **Member authentication** — Token-based login with 30-day sessions, httpOnly cookies, self-service profiles
+- **Score tracking** — Adjustments with reasons, auto-calculated scores per member
+- **Events management** — Admin-created events with dates, descriptions, and types
+- **Club history** — Timeline of club milestones and achievements
+- **Member directory** — Searchable member list with avatars and positions
+- **Responsive design** — Mobile-first with animated navbar, hamburger menu
+- **Dark mode** — System-default theme with animated toggle (View Transitions API)
+- **Admin panel** — Payload CMS admin for full CRUD operations
 
-## Quick Start - local setup
+## Tech Stack
 
-To spin up this template locally, follow these steps:
+| Layer | Technology |
+|-------|-----------|
+| Framework | [Next.js](https://nextjs.org/) 16 |
+| CMS | [Payload](https://payloadcms.com/) 3.85 |
+| Database | MongoDB via `@payloadcms/db-mongodb` |
+| Editor | Lexical rich text (`@payloadcms/richtext-lexical`) |
+| Styling | Tailwind CSS v4 + `class-variance-authority` |
+| Animations | `motion/react` |
+| Icons | `lucide-react` |
+| Storage | Vercel Blob Storage (`@payloadcms/storage-vercel-blob`) |
+| UI Components | ReUI, MagicUI |
+| Analysis | Vercel Analytics + Speed Insights |
 
-### Clone
+## Getting Started
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+### Prerequisites
+
+- Node.js 20+
+- MongoDB instance (local or Atlas)
+- pnpm (recommended) or npm
+
+### Installation
+
+```bash
+git clone <repo-url> leo-club
+cd leo-club
+pnpm install
+```
+
+### Environment Variables
+
+Copy `.env.example` to `.env` and fill in the values:
+
+```env
+DATABASE_URL=mongodb://127.0.0.1/leo-club
+PAYLOAD_SECRET=your-random-secret-here
+BLOB_READ_WRITE_TOKEN=vercel_blob_rw_...
+BLOB_STORE_ID=store_...
+```
 
 ### Development
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+```bash
+pnpm dev
+```
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+Open [http://localhost:3000](http://localhost:3000). The Payload admin panel is at `/admin`.
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+### Generate Types
 
-#### Docker (Optional)
+After schema changes:
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+```bash
+pnpm generate:types
+pnpm generate:importmap
+```
 
-To do so, follow these steps:
+## Collections
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+| Collection | Slug | Purpose |
+|------------|------|---------|
+| Users | `users` | Admin accounts (club admins + super admins) |
+| Members | `members` | Club member accounts with auth, position, score |
+| Events | `events` | Club events with dates and descriptions |
+| Event Types | `event-types` | Categorization for events |
+| Club History | `club-history` | Timeline entries for club milestones |
+| Score Adjustments | `score-adjustments` | Individual score changes with reasons |
+| Positions | `positions` | Member roles (President, Secretary, etc.) |
+| Media | `media` | Uploaded images and files (Vercel Blob) |
 
-## How it works
+## Project Structure
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+```
+src/
+├── app/
+│   ├── (frontend)/        # Public-facing pages
+│   │   ├── club/[slug]/   # Club pages (alpha, omega)
+│   │   │   ├── members/   # Member area (auth required)
+│   │   │   ├── events/    # Events pages
+│   │   │   └── about/     # Club info + history
+│   │   └── layout.tsx     # Root layout with nav
+│   ├── (payload)/         # Payload admin
+│   └── api/               # Custom API routes
+│       ├── member-login/  # Member JWT login
+│       └── member-logout/ # Clear session
+├── collections/           # Payload collection configs
+├── components/
+│   └── ui/                # UI components (shadcn-style)
+├── lib/
+│   ├── access.ts          # Access control helpers
+│   ├── auth.ts            # Server-side auth (getMemberUser)
+│   ├── client-auth.ts     # Client-side authedFetch
+│   ├── club.ts            # Club data
+│   ├── fields.ts          # Reusable field definitions
+│   ├── hooks.ts           # Collection hooks
+│   └── utils.ts           # cn() utility
+└── payload.config.ts      # Payload configuration
+```
 
-### Collections
+## Scripts
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start dev server |
+| `pnpm build` | Production build |
+| `pnpm start` | Start production server |
+| `pnpm lint` | Run ESLint |
+| `pnpm generate:types` | Regenerate Payload TypeScript types |
+| `pnpm generate:importmap` | Regenerate Payload import map |
+| `pnpm test` | Run integration + E2E tests |
 
-- #### Users (Authentication)
+## Deployment
 
-  Users are auth-enabled collections that have access to the admin panel.
+Designed for [Vercel](https://vercel.com). The production build outputs a standalone Next.js app:
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/3.x/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+```bash
+pnpm build
+pnpm start
+```
 
-- #### Media
-
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
-
-### Docker
-
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
-
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
-
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
-
-## Questions
-
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+Requires a MongoDB connection and Vercel Blob Storage credentials in production environment variables.
