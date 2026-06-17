@@ -86,6 +86,14 @@ export const Members: CollectionConfig = {
       name: 'contactEmail',
       type: 'text',
       label: 'Contact Email',
+      access: {
+        read: ({ req: { user }, id }) => {
+          if (!user) return false
+          if (user.collection === 'users') return true
+          if (user.collection === 'members') return user.id === id
+          return false
+        },
+      },
       admin: {
         description: 'Only visible to the member themselves',
       },
