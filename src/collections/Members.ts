@@ -16,7 +16,7 @@ export const Members: CollectionConfig = {
       requireEmail: false,
       allowEmailLogin: false,
     },
-    tokenExpiration: 2592000,
+    tokenExpiration: 86400,
     maxLoginAttempts: 5,
     lockTime: 600000,
   },
