@@ -16,7 +16,7 @@ export interface MemberUser {
 
 export async function getMemberUser(): Promise<MemberUser | null> {
   const cookieStore = await cookies()
-  const token = cookieStore.get('member-token')?.value
+  const token = cookieStore.get('payload-token')?.value
 
   if (!token) return null
 
