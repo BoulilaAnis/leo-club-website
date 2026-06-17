@@ -1,11 +1,11 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { getClub } from '@/lib/club'
 import type { ClubHistory } from '@/payload-types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { RichText } from '@payloadcms/richtext-lexical/react'
+import { ImageWithSkeleton } from '@/components/reui/image-with-skeleton'
 
 export default async function ClubPage({
   params,
@@ -100,12 +100,13 @@ export default async function ClubPage({
                     return (
                       <figure key={img.id ?? img.caption ?? ''} className="shrink-0">
                         {imageUrl && (
-                          <Image
+                          <ImageWithSkeleton
                             src={imageUrl}
                             alt={img.caption || ''}
                             width={192}
                             height={128}
-                            className="h-32 w-48 rounded-lg object-cover"
+                            className="rounded-lg object-cover"
+                            containerClassName="h-32 w-48"
                             sizes="192px"
                           />
                         )}

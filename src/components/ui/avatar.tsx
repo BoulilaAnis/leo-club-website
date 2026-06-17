@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import { cn } from '@/lib/utils'
+import { ImageWithSkeleton } from '@/components/reui/image-with-skeleton'
 
 interface AvatarProps {
   src?: string | null
@@ -11,9 +11,14 @@ interface AvatarProps {
 export function Avatar({ src, alt, fallback, className }: AvatarProps) {
   if (src) {
     return (
-      <div className={cn('relative overflow-hidden rounded-full', className)}>
-        <Image src={src} alt={alt ?? fallback} fill className="object-cover" sizes="96px" />
-      </div>
+      <ImageWithSkeleton
+        src={src}
+        alt={alt ?? fallback}
+        fill
+        className="object-cover"
+        containerClassName={cn('rounded-full', className)}
+        sizes="96px"
+      />
     )
   }
 

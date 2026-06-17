@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { getClub } from '@/lib/club'
 import { Button } from '@/components/ui/button'
+import { ImageWithSkeleton } from '@/components/reui/image-with-skeleton'
 
 export default async function EventDetailPage({
   params,
@@ -57,15 +57,14 @@ export default async function EventDetailPage({
       </div>
 
       {event.image && (
-        <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
-          <Image
-            src={typeof event.image === 'object' && 'url' in event.image ? event.image.url ?? '' : ''}
-            alt={event.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 768px"
-          />
-        </div>
+        <ImageWithSkeleton
+          src={typeof event.image === 'object' && 'url' in event.image ? event.image.url ?? '' : ''}
+          alt={event.title}
+          fill
+          className="object-cover"
+          containerClassName="aspect-video rounded-xl"
+          sizes="(max-width: 768px) 100vw, 768px"
+        />
       )}
 
       {event.description && (
