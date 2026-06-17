@@ -17,6 +17,8 @@ export const Members: CollectionConfig = {
       allowEmailLogin: false,
     },
     tokenExpiration: 2592000,
+    maxLoginAttempts: 5,
+    lockTime: 600000,
   },
   hooks: {
     beforeValidate: [
