@@ -23,18 +23,18 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
   const ctx = detectContext(pathname)
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  function isActive(href: string): boolean {
+  function isActive(href: string, exact = false): boolean {
     if (pathname === href) return true
-    if (href !== '/' && pathname.startsWith(href + '/')) return true
+    if (!exact && href !== '/' && pathname.startsWith(href + '/')) return true
     return false
   }
 
-  function linkClasses(href: string, extra?: string) {
+  function linkClasses(href: string, exact = false, extra?: string) {
     return cn(
       'rounded-md px-3 py-2 text-sm font-medium transition-colors',
-      isActive(href)
-        ? 'bg-accent text-accent-foreground'
-        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+      isActive(href, exact)
+        ? 'bg-secondary text-secondary-foreground'
+        : 'text-muted-foreground hover:bg-secondary hover:text-secondary-foreground',
       extra,
     )
   }
@@ -70,7 +70,7 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
     if (ctx.area === 'public') {
       return (
         <>
-          <Link href={`/club/${ctx.slug}`} className={linkClasses(`/club/${ctx.slug}`)}>
+          <Link href={`/club/${ctx.slug}`} className={linkClasses(`/club/${ctx.slug}`, true)}>
             Home
           </Link>
           <Link
@@ -79,10 +79,7 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
           >
             Events
           </Link>
-          <Link
-            href={`/club/${ctx.slug}/about`}
-            className={linkClasses(`/club/${ctx.slug}/about`)}
-          >
+          <Link href={`/club/${ctx.slug}/about`} className={linkClasses(`/club/${ctx.slug}/about`)}>
             About
           </Link>
         </>
@@ -91,7 +88,7 @@ export default function Nav({ user }: { user?: MemberUser | null }) {
 
     return (
       <>
-        <Link href={`/club/${ctx.slug}`} className={linkClasses(`/club/${ctx.slug}`)}>
+        <Link href={`/club/${ctx.slug}`} className={linkClasses(`/club/${ctx.slug}`, true)}>
           Home
         </Link>
         <Link
